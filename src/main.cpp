@@ -2,50 +2,90 @@
 #include "ContainmentAlgorithmBuilder.hpp"
 
 
-void ReadTest(std::istream& in, ContainmentAlgorithmBuilder& builder)
-{
-	size_t polygonVertices = 0;
-	in >> polygonVertices;
-	for (size_t i = 0; i < polygonVertices; ++i)
+ContainmentAlgorithm ReadTest(std::istream& in)
+{	
+	ContainmentAlgorithmBuilder builder;
+
+	size_t pointCount = 0;
+	in >> pointCount;
+	for (size_t i = 0; i < pointCount; ++i)
 	{
 		Point p;
-		std::cin >> p;
+		in >> p;
 		builder.AddPolygonVertex(p);
 	}
 
-	size_t querries = 0;
-	in >> querries;
-	for (size_t i = 0; i < querries; ++i)
+	size_t queryCount = 0;
+	in >> queryCount;
+	for (size_t i = 0; i < queryCount; ++i)
 	{
 		Point p;
-		std::cin >> p;
-		builder.AddQuerryPoint(p);
+		in >> p;
+		builder.AddQueryPoint(p);
+	}
+
+	return builder.Build();
+}
+
+
+std::vector<ContainmentAlgorithm> ReadMultitest(std::istream& in)
+{
+	size_t multitests = 0;
+	in >> multitests;
+	std::vector<ContainmentAlgorithm> result;
+	result.reserve(multitests);
+
+	for (size_t i = 0; i < multitests; ++i)
+	{
+		result.push_back(ReadTest(in));
+	}
+
+	return result;
+}
+
+std::vector<std::vector<QueryResultType>>
+	SolveMultitest(std::vector<ContainmentAlgorithm>&& data)
+{
+	std::vector<std::vector<QueryResultType>> result;
+
+	for (auto& algorithm : data)
+	{
+		result.push_back(algorithm.Calculate());
+	}
+
+	return result;
+}
+
+void WriteTest(std::ostream& out, const std::vector<QueryResultType>& result)
+{
+	for (const auto& type : result)
+	{
+		switch (type)
+		{
+			case QueryResultType::Inside:
+				out << "INSIDE";
+				break;
+			case QueryResultType::Outside:
+				out << "OUTSIDE";
+				break;
+			case QueryResultType::Border:
+				out << "BORDER";
+				break;
+		}
+		out << std::endl;
 	}
 }
 
-void WriteTest(std::ostream& out, const std::vector<QuerryResultType>& result)
+void WriteMultitest(std::ostream& out, const std::vector<std::vector<QueryResultType>>& result)
 {
-	for (auto type : result)
+	for (const auto& test : result)
 	{
-		if (type == QuerryResultType::Inside)
-			out << "INSIDE" << std::endl;
-		if (type == QuerryResultType::Outside)
-			out << "OUTSIDE" << std::endl;
-		if (type == QuerryResultType::Border)
-			out << "BORDER" << std::endl;
+		WriteTest(out, test);
+		out << std::endl;
 	}
 }
 
 int main()
 {
-	size_t testCount = 0;
-	std::cin >> testCount;
-
-	for (size_t t = 0; t < testCount; ++t)
-	{
-		ContainmentAlgorithmBuilder builder;
-		ReadTest(std::cin, builder);
-		WriteTest(std::cout, builder.Build().Calculate());
-		std::cout << std::endl;
-	}
+	WriteMultitest(std::cout, SolveMultitest(std::move(ReadMultitest(std::cin))));
 }

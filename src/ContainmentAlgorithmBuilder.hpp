@@ -13,7 +13,7 @@ private:
 
 public:
 	ContainmentAlgorithmBuilder& AddPolygonVertex(Point p);
-	ContainmentAlgorithmBuilder& AddQuerryPoint(Point p);
+	ContainmentAlgorithmBuilder& AddQueryPoint(Point p);
 	ContainmentAlgorithm Build();
 };
 

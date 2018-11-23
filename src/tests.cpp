@@ -57,18 +57,18 @@ TEST_CASE("Algo test", "[algo]")
 		algorithm.polygon_ = {{0, 0}, {0, 4}, {4, 4}, {4, 0}};
 		algorithm.querries_ = {{-1, -1}, {0, -1}, {1, 1},
 			{3, 5}, {3, 1}, {1, 4}, {4, 0}};
-		std::vector<QuerryResultType> result;
+		std::vector<QueryResultType> result;
 		REQUIRE_NOTHROW((result = algorithm.Calculate()));
 
-		std::vector<QuerryResultType> proper = 
+		std::vector<QueryResultType> proper = 
 			{
-				QuerryResultType::Outside,
-				QuerryResultType::Outside, 
-				QuerryResultType::Inside,
-				QuerryResultType::Outside,
-				QuerryResultType::Inside,
-				QuerryResultType::Border,
-				QuerryResultType::Border
+				QueryResultType::Outside,
+				QueryResultType::Outside, 
+				QueryResultType::Inside,
+				QueryResultType::Outside,
+				QueryResultType::Inside,
+				QueryResultType::Border,
+				QueryResultType::Border
 			};
 		REQUIRE(result == proper);
 	}
@@ -81,20 +81,20 @@ TEST_CASE("Algo test", "[algo]")
 
 		algorithm.querries_ = {{1, 6}, {5, 6}, {1, 3}, {5, 8}, {1, 7},
 			{4, 8}, {0, 5}, {4, 5}, {6, 8}};
-		std::vector<QuerryResultType> result;
+		std::vector<QueryResultType> result;
 		REQUIRE_NOTHROW((result = algorithm.Calculate()));
 
-		std::vector<QuerryResultType> proper = 
+		std::vector<QueryResultType> proper = 
 			{
-				QuerryResultType::Inside,
-				QuerryResultType::Inside,
-				QuerryResultType::Inside,
-				QuerryResultType::Inside,
-				QuerryResultType::Inside,
-				QuerryResultType::Border,
-				QuerryResultType::Border,
-				QuerryResultType::Border,
-				QuerryResultType::Outside
+				QueryResultType::Inside,
+				QueryResultType::Inside,
+				QueryResultType::Inside,
+				QueryResultType::Inside,
+				QueryResultType::Inside,
+				QueryResultType::Border,
+				QueryResultType::Border,
+				QueryResultType::Border,
+				QueryResultType::Outside
 			};
 		REQUIRE(result == proper);
 	}
@@ -116,27 +116,27 @@ TEST_CASE("Builder test", "[builder]")
 			std::bind(&ContainmentAlgorithmBuilder::AddPolygonVertex,
 				&builder, std::placeholders::_1));
 		std::for_each(quer.begin(), quer.end(),
-			std::bind(&ContainmentAlgorithmBuilder::AddQuerryPoint,
+			std::bind(&ContainmentAlgorithmBuilder::AddQueryPoint,
 				&builder, std::placeholders::_1));
 
 		auto algorithm = builder.Build();
 
-		std::vector<QuerryResultType> result;
+		std::vector<QueryResultType> result;
 		REQUIRE_NOTHROW((result = algorithm.Calculate()));
 
-		std::vector<QuerryResultType> proper = 
+		std::vector<QueryResultType> proper = 
 			{
-				QuerryResultType::Border,
-				QuerryResultType::Border,
-				QuerryResultType::Inside,
-				QuerryResultType::Outside,
-				QuerryResultType::Outside,
-				QuerryResultType::Outside,
-				QuerryResultType::Border,
-				QuerryResultType::Inside,
-				QuerryResultType::Outside,
-				QuerryResultType::Border,
-				QuerryResultType::Border
+				QueryResultType::Border,
+				QueryResultType::Border,
+				QueryResultType::Inside,
+				QueryResultType::Outside,
+				QueryResultType::Outside,
+				QueryResultType::Outside,
+				QueryResultType::Border,
+				QueryResultType::Inside,
+				QueryResultType::Outside,
+				QueryResultType::Border,
+				QueryResultType::Border
 			};
 		REQUIRE(result == proper);
 	}
@@ -154,21 +154,21 @@ TEST_CASE("Builder test", "[builder]")
 			std::bind(&ContainmentAlgorithmBuilder::AddPolygonVertex,
 				&builder, std::placeholders::_1));
 		std::for_each(quer.begin(), quer.end(),
-			std::bind(&ContainmentAlgorithmBuilder::AddQuerryPoint,
+			std::bind(&ContainmentAlgorithmBuilder::AddQueryPoint,
 				&builder, std::placeholders::_1));
 
 		auto algorithm = builder.Build();
 
-		std::vector<QuerryResultType> result;
+		std::vector<QueryResultType> result;
 		REQUIRE_NOTHROW((result = algorithm.Calculate()));
 
-		std::vector<QuerryResultType> proper = 
+		std::vector<QueryResultType> proper = 
 			{
-				QuerryResultType::Border,
-				QuerryResultType::Border,
-				QuerryResultType::Border,
-				QuerryResultType::Border,
-				QuerryResultType::Border
+				QueryResultType::Border,
+				QueryResultType::Border,
+				QueryResultType::Border,
+				QueryResultType::Border,
+				QueryResultType::Border
 			};
 		REQUIRE(result == proper);
 	}
@@ -185,19 +185,19 @@ TEST_CASE("Builder test", "[builder]")
 			std::bind(&ContainmentAlgorithmBuilder::AddPolygonVertex,
 				&builder, std::placeholders::_1));
 		std::for_each(quer.begin(), quer.end(),
-			std::bind(&ContainmentAlgorithmBuilder::AddQuerryPoint,
+			std::bind(&ContainmentAlgorithmBuilder::AddQueryPoint,
 				&builder, std::placeholders::_1));
 
 		auto algorithm = builder.Build();
 
-		std::vector<QuerryResultType> result;
+		std::vector<QueryResultType> result;
 		REQUIRE_NOTHROW((result = algorithm.Calculate()));
 
-		std::vector<QuerryResultType> proper = 
+		std::vector<QueryResultType> proper = 
 			{
-				QuerryResultType::Border,
-				QuerryResultType::Border,
-				QuerryResultType::Border
+				QueryResultType::Border,
+				QueryResultType::Border,
+				QueryResultType::Border
 			};
 		REQUIRE(result == proper);
 	}

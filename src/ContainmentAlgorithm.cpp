@@ -153,15 +153,16 @@ bool ContainmentAlgorithm::SegmentSetElementComparator::
 			result = false;
 		}
 
-		if (p1[1].y * std::abs(p2[i].x - p1[0].x) + p1[0].y * std::abs(p1[1].x - p2[i].x)
-				== p2[i].y * std::abs(p1[1].x - p1[0].x))
+		auto topY = p1[1].y * std::abs(p2[i].x - p1[0].x) + p1[0].y * std::abs(p1[1].x - p2[i].x);
+		auto bottomY = p2[i].y * std::abs(p1[1].x - p1[0].x);
+
+		if (topY == bottomY)
 		{
 			if (!result) std::swap(p1, p2);
 			continue;
 		}
 
-		return (p1[1].y * std::abs(p2[i].x - p1[0].x) + p1[0].y * std::abs(p1[1].x - p2[i].x)
-				> p2[i].y * std::abs(p1[1].x - p1[0].x)) != result;
+		return (topY > bottomY) != result;
 	}
 
 	return false;
