@@ -6,16 +6,14 @@
 
 using Scalar = long long;
 
-class Point
+struct Point
 {
-public:
 	Scalar x;
 	Scalar y;
 };
 
-class Segment
+struct Segment
 {
-public:
 	Point a;
 	Point b;
 };
@@ -66,7 +64,7 @@ inline bool operator==(const TVector& first, const TVector& second)
 	return x1 == x2 && y1 == y2;
 }
 
-inline bool PointOnSegment(const Segment& seg, const Point& point)
+inline bool IsPointOnSegment(const Segment& seg, const Point& point)
 {
 	return (seg.a - seg.b) % (point - seg.b) == 0
 		&& (seg.a - seg.b) * (point - seg.b) >= 0

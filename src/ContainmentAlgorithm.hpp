@@ -8,7 +8,7 @@
 #include <ext/pb_ds/tree_policy.hpp>
 
 
-enum class QuerryResultType
+enum class QueryResultType
 {
 	Inside,
 	Border,
@@ -21,22 +21,20 @@ private:
 	enum class EventType
 	{
 		SegmentStart,
-		Querry,
+		Query,
 		SegmentEnd,
 		SegmentDelayedStart
 	};
 
-	class Event
+	struct Event
 	{
-	public:
 		Scalar x;
 		size_t index;
 		EventType type;
 	};
 
-	class SegmentSetElement
+	struct SegmentSetElement
 	{
-	public:
 		Segment segment;
 		size_t index;
 	};
@@ -62,22 +60,19 @@ private:
 
 	std::vector<Event> sortedEvents_;
 
-	std::vector<QuerryResultType> result_;
+	std::vector<QueryResultType> result_;
 
 	ContainmentAlgorithm() = default;
 
-	bool pointOnVerticalEdge(const Segment& after,
-		const Segment& before, const Point& point);
-
 	void generateEvents();
 
-	void handleQuerry(size_t index);
+	void handleQuery(size_t index);
 
 	friend class ContainmentAlgorithmBuilder;
 
 public:
 
-	std::vector<QuerryResultType> Calculate();
+	std::vector<QueryResultType> Calculate();
 };
 
 #endif // CONTAINMENT_ALGORITHM_HPP

@@ -37,12 +37,12 @@ void ContainmentAlgorithm::generateEvents()
 
 	for (size_t i = 0; i < querries_.size(); ++i)
 	{
-		sortedEvents_.push_back({querries_[i].x, i, EventType::Querry});	
+		sortedEvents_.push_back({querries_[i].x, i, EventType::Query});	
 	}
 
 }
 
-void ContainmentAlgorithm::handleQuerry(size_t index)
+void ContainmentAlgorithm::handleQuery(size_t index)
 {
 	Point querry = querries_[index];
 
@@ -52,7 +52,7 @@ void ContainmentAlgorithm::handleQuerry(size_t index)
 			size_t n = polygon_.size();
 			for (ssize_t i = -1; i <= 1; ++i)
 			{
-				if (PointOnSegment(
+				if (IsPointOnSegment(
 					{polygon_[(n + index + i) % n],
 						polygon_[(n + index + i + 1) % n]},
 							querry))
@@ -76,20 +76,20 @@ void ContainmentAlgorithm::handleQuerry(size_t index)
 
 	if (matched)
 	{
-		result_[index] = QuerryResultType::Border;
+		result_[index] = QueryResultType::Border;
 	}
 	else if (k % 2)
 	{
-		result_[index] = QuerryResultType::Inside;
+		result_[index] = QueryResultType::Inside;
 	}
 	else
 	{
-		result_[index] = QuerryResultType::Outside;
+		result_[index] = QueryResultType::Outside;
 	}
 }
 
 
-std::vector<QuerryResultType> ContainmentAlgorithm::Calculate()
+std::vector<QueryResultType> ContainmentAlgorithm::Calculate()
 {
 	result_.resize(querries_.size());
 
@@ -107,9 +107,9 @@ std::vector<QuerryResultType> ContainmentAlgorithm::Calculate()
 		auto index = sortedEvents_[scanline].index;
 		auto type = sortedEvents_[scanline].type;
 
-		if (type == EventType::Querry)
+		if (type == EventType::Query)
 		{
-			handleQuerry(index);
+			handleQuery(index);
 		}
 		else
 		{
