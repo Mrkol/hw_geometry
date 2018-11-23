@@ -25,11 +25,13 @@ ContainmentAlgorithm ContainmentAlgorithmBuilder::Build()
 {
 	auto& pol = algorithm_.polygon_;
 
-	while (pol.size() >= 2 && 
-		(pol[1] - pol[0]) % (pol.back() - pol[0]) == 0)
+	size_t i = 0;
+	while (pol.size() - i >= 2 && 
+		(pol[i + 1] - pol[i]) % (pol.back() - pol[i]) == 0)
 	{
-		pol.pop_back();
+		++i;
 	}
+	pol.erase(pol.begin(), pol.begin() + i);
 
 	while (pol.size() >= 2 && 
 		(pol[0] - pol[pol.size() - 1]) % (pol[pol.size() - 2] - pol[pol.size() - 1]) == 0)

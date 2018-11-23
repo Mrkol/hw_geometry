@@ -46,5 +46,6 @@ int main()
 		ContainmentAlgorithmBuilder builder;
 		ReadTest(std::cin, builder);
 		WriteTest(std::cout, builder.Build().Calculate());
+		std::cout << std::endl;
 	}
 }

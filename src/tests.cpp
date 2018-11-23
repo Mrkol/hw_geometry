@@ -5,7 +5,7 @@
 #include "ContainmentAlgorithmBuilder.hpp"
 
 
-TEST_CASE("Tree comparator test", "[containmentalgorithm]")
+TEST_CASE("Comparator test", "[comparator]")
 {
 	ContainmentAlgorithm::SegmentSetElementComparator cmp;
 
@@ -43,13 +43,16 @@ TEST_CASE("Tree comparator test", "[containmentalgorithm]")
 	REQUIRE(cmp({{1, 2}, {-1, 3}}, {{-1, 3}, {0, 5}}));
 	REQUIRE(!cmp({{0, 7}, {8, 9}}, {{-1, 3}, {0, 5}}));
 	REQUIRE(cmp({{-1, 3}, {0, 5}}, {{0, 7}, {8, 9}}));
+
+	REQUIRE(!cmp({{-5, -5}, {-5, -5}}, {{-10, 10}, {0, -20}}));
+	REQUIRE(!cmp({{-10, 10}, {0, -20}}, {{-5, -5}, {-5, -5}}));
 }
 
-TEST_CASE("Containmnet algorithm test", "[containmentalgorithm]")
+TEST_CASE("Algo test", "[algo]")
 {
 	ContainmentAlgorithm algorithm;
 
-	SECTION("1")
+	SECTION("Algo 1")
 	{
 		algorithm.polygon_ = {{0, 0}, {0, 4}, {4, 4}, {4, 0}};
 		algorithm.querries_ = {{-1, -1}, {0, -1}, {1, 1},
@@ -70,7 +73,7 @@ TEST_CASE("Containmnet algorithm test", "[containmentalgorithm]")
 		REQUIRE(result == proper);
 	}
 
-	SECTION("2")
+	SECTION("Algo 2")
 	{
 		algorithm.polygon_ = 
 			{{0, 7}, {8, 9}, {3, 7}, {8, 7}, {3, 5}, {6, 5}, {1, 4},
@@ -97,9 +100,9 @@ TEST_CASE("Containmnet algorithm test", "[containmentalgorithm]")
 	}
 }
 
-TEST_CASE("Containmnet algorithm builder test", "[containmentalgorithm]")
+TEST_CASE("Builder test", "[builder]")
 {
-	SECTION("1")
+	SECTION("Builder 1")
 	{
 		std::vector<Point> pol
 			{{0, 0}, {0, 3}, {0, 6}, {3, 6},
@@ -132,6 +135,67 @@ TEST_CASE("Containmnet algorithm builder test", "[containmentalgorithm]")
 				QuerryResultType::Border,
 				QuerryResultType::Inside,
 				QuerryResultType::Outside,
+				QuerryResultType::Border,
+				QuerryResultType::Border
+			};
+		REQUIRE(result == proper);
+	}
+
+	SECTION("Builder 2")
+	{
+		std::vector<Point> pol
+			{{0, 9}, {0, 12}, {0, 15}, {0, 18},
+			{-2000000, 9}, {0, 0}, {0, 3}, {0, 6}};
+
+		std::vector<Point> quer {{0, 12}, {0, 15}, {0, 18}, {0, 8}, {0, 13}};
+
+		ContainmentAlgorithmBuilder builder;
+		std::for_each(pol.begin(), pol.end(),
+			std::bind(&ContainmentAlgorithmBuilder::AddPolygonVertex,
+				&builder, std::placeholders::_1));
+		std::for_each(quer.begin(), quer.end(),
+			std::bind(&ContainmentAlgorithmBuilder::AddQuerryPoint,
+				&builder, std::placeholders::_1));
+
+		auto algorithm = builder.Build();
+
+		std::vector<QuerryResultType> result;
+		REQUIRE_NOTHROW((result = algorithm.Calculate()));
+
+		std::vector<QuerryResultType> proper = 
+			{
+				QuerryResultType::Border,
+				QuerryResultType::Border,
+				QuerryResultType::Border,
+				QuerryResultType::Border,
+				QuerryResultType::Border
+			};
+		REQUIRE(result == proper);
+	}
+
+	SECTION("Builder 3")
+	{
+		std::vector<Point> pol
+			{{10, 10}, {-10, 10}, {0, -20}};
+
+		std::vector<Point> quer {{5, -5}, {-5, -5}, {0, 10}};
+
+		ContainmentAlgorithmBuilder builder;
+		std::for_each(pol.begin(), pol.end(),
+			std::bind(&ContainmentAlgorithmBuilder::AddPolygonVertex,
+				&builder, std::placeholders::_1));
+		std::for_each(quer.begin(), quer.end(),
+			std::bind(&ContainmentAlgorithmBuilder::AddQuerryPoint,
+				&builder, std::placeholders::_1));
+
+		auto algorithm = builder.Build();
+
+		std::vector<QuerryResultType> result;
+		REQUIRE_NOTHROW((result = algorithm.Calculate()));
+
+		std::vector<QuerryResultType> proper = 
+			{
+				QuerryResultType::Border,
 				QuerryResultType::Border,
 				QuerryResultType::Border
 			};
