@@ -62,10 +62,16 @@ private:
 
 	std::vector<Event> sortedEvents_;
 
+	std::vector<QuerryResultType> result_;
+
 	ContainmentAlgorithm() = default;
 
 	bool pointOnVerticalEdge(const Segment& after,
 		const Segment& before, const Point& point);
+
+	void generateEvents();
+
+	void handleQuerry(size_t index);
 
 	friend class ContainmentAlgorithmBuilder;
 

@@ -66,10 +66,16 @@ inline bool operator==(const TVector& first, const TVector& second)
 	return x1 == x2 && y1 == y2;
 }
 
+inline bool PointOnSegment(const Segment& seg, const Point& point)
+{
+	return (seg.a - seg.b) % (point - seg.b) == 0
+		&& (seg.a - seg.b) * (point - seg.b) >= 0
+		&& (seg.b - seg.a) * (point - seg.a) >= 0;
+}
+
 inline std::ostream& operator<<(std::ostream& out, const Point& point)
 {
-	auto[x, y] = point;
-	out << "(" << x << ", " << y << ")";
+	out << "(" << point.x << ", " << point.y << ")";
 	return out;
 }
 
@@ -81,16 +87,8 @@ inline std::istream& operator>>(std::istream& in, Point& point)
 
 inline std::ostream& operator<<(std::ostream& out, const Segment& seg)
 {
-	auto[x, y] = seg;
-	out << "(" << x << ", " << y << ")";
+	out << "(" << seg.a << ", " << seg.b << ")";
 	return out;
-}
-
-inline bool PointOnSegment(const Segment& seg, const Point& point)
-{
-	return (seg.a - seg.b) % (point - seg.b) == 0
-		&& (seg.a - seg.b) * (point - seg.b) >= 0
-		&& (seg.b - seg.a) * (point - seg.a) >= 0;
 }
 
 
